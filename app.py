@@ -90,7 +90,7 @@ st.markdown(
 # ---------------------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv(r"C:\Users\riyan\Downloads\palo-alto-engagement-intelligence\data\palo_alto_networks.csv")
+    df = pd.read_csv("palo_alto_networks.csv")
 
     df["EngagementIndex"] = (
         df["JobSatisfaction"] +
