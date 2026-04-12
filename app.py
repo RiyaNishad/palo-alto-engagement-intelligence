@@ -8,23 +8,17 @@ st.set_page_config(
     layout="wide"
 )
 
-# ---------------------------
-# Theme colors
-# ---------------------------
-PRIMARY = "#2A9D8F"      # Engagement / positive workforce signal
-SECONDARY = "#4C78A8"    # Supporting analytical blue
-LOW_RISK = "#7BC96F"     # Low burnout
-MED_RISK = "#F4A261"     # Medium burnout
-HIGH_RISK = "#E76F51"    # High burnout / attrition warning
+PRIMARY = "#2A9D8F"
+SECONDARY = "#4C78A8"
+LOW_RISK = "#7BC96F"
+MED_RISK = "#F4A261"
+HIGH_RISK = "#E76F51"
 BG = "#0E1117"
 CARD = "#161B22"
 TEXT = "#E6EDF3"
 MUTED = "#9BA3AF"
 BORDER = "#2D333B"
 
-# ---------------------------
-# Custom styling
-# ---------------------------
 st.markdown(
     f"""
     <style>
@@ -85,13 +79,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ---------------------------
-# Load data
-# ---------------------------
 @st.cache_data
 def load_data():
-   DATA_PATH = "Palo-Alto-Networks.csv"
-   df = pd.read_csv(DATA_PATH)
+    DATA_PATH = "Palo-Alto-Networks.csv"
+    df = pd.read_csv(DATA_PATH)
 
     df["EngagementIndex"] = (
         df["JobSatisfaction"] +
@@ -120,22 +111,15 @@ def load_data():
     df["AttritionLabel"] = df["Attrition"].map({1: "Yes", 0: "No"})
     return df
 
-
 try:
     df = load_data()
     st.success("Dataset loaded and processed successfully.")
 
-    # ---------------------------
-    # Header
-    # ---------------------------
     st.title("Palo Alto Engagement Intelligence")
     st.caption(
         "A workforce well-being dashboard tracking engagement, burnout exposure, attrition risk, and work-life balance."
     )
 
-    # ---------------------------
-    # Sidebar filters
-    # ---------------------------
     st.sidebar.header("Filter Panel")
 
     dept_options = sorted(df["Department"].dropna().unique())
@@ -172,9 +156,6 @@ try:
         value=(int(df["YearsAtCompany"].min()), int(df["YearsAtCompany"].max()))
     )
 
-    # ---------------------------
-    # Filtering logic
-    # ---------------------------
     filtered_df = df[
         (df["Department"].isin(selected_departments)) &
         (df["JobRole"].isin(selected_job_roles)) &
@@ -186,9 +167,6 @@ try:
     if selected_overtime != "All":
         filtered_df = filtered_df[filtered_df["OverTime"] == selected_overtime]
 
-    # ---------------------------
-    # KPI row
-    # ---------------------------
     st.markdown("## Overview Metrics")
     k1, k2, k3, k4 = st.columns(4)
 
@@ -202,9 +180,6 @@ try:
     k3.metric("Avg Work-Life Balance", f"{avg_wlb:.2f}")
     k4.metric("Attrition Rate", f"{attrition_rate:.1f}%")
 
-    # ---------------------------
-    # Engagement section
-    # ---------------------------
     st.markdown("## Engagement Health Overview")
     c1, c2 = st.columns(2)
 
@@ -263,9 +238,6 @@ try:
         unsafe_allow_html=True
     )
 
-    # ---------------------------
-    # Burnout section
-    # ---------------------------
     st.markdown("## Burnout Risk Dashboard")
     c3, c4 = st.columns(2)
 
@@ -316,9 +288,6 @@ try:
         )
         st.plotly_chart(fig_overtime, use_container_width=True)
 
-    # ---------------------------
-    # Attrition section
-    # ---------------------------
     st.markdown("## Attrition Insights")
     c5, c6 = st.columns(2)
 
@@ -369,9 +338,6 @@ try:
         )
         st.plotly_chart(fig_scatter, use_container_width=True)
 
-    # ---------------------------
-    # High risk segment
-    # ---------------------------
     st.markdown("## High-Risk Segment Snapshot")
     high_risk_df = filtered_df[filtered_df["BurnoutRiskLevel"] == "High"]
 
@@ -400,9 +366,6 @@ try:
         h3.metric("High-Risk Avg Engagement", "0.0")
         st.info("No high-risk employees are present in the current filtered segment.")
 
-    # ---------------------------
-    # Download section
-    # ---------------------------
     st.markdown("## Download Filtered Data")
     csv_data = filtered_df.to_csv(index=False).encode("utf-8")
     st.download_button(
@@ -412,9 +375,6 @@ try:
         mime="text/csv"
     )
 
-    # ---------------------------
-    # Table preview
-    # ---------------------------
     st.markdown("## Filtered Dataset Preview")
     with st.expander("View filtered dataset"):
         st.dataframe(filtered_df, use_container_width=True, height=320)
