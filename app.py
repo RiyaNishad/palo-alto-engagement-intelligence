@@ -90,7 +90,8 @@ st.markdown(
 # ---------------------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv("palo_alto_networks.csv")
+   DATA_PATH = "Palo-Alto-Networks.csv"
+   df = pd.read_csv(DATA_PATH)
 
     df["EngagementIndex"] = (
         df["JobSatisfaction"] +
