@@ -80,8 +80,8 @@ st.markdown(
 )
 
 from pathlib import Path
-import streamlit as st
 import pandas as pd
+import streamlit as st
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_PATH = BASE_DIR / "palo_alto_networks.csv"
@@ -92,7 +92,7 @@ def load_data():
         st.error(f"Missing file: {DATA_PATH}")
         st.stop()
     return pd.read_csv(DATA_PATH)
-
+    
     df["EngagementIndex"] = (
         df["JobSatisfaction"] +
         df["EnvironmentSatisfaction"] +
